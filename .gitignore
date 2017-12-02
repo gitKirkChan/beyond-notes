@@ -1,0 +1,11 @@
+# ignore Maven generated target folders
+*/target
+
+# ignore eclipse files and folders
+.project
+.classpath
+.settings
+.metadata
+/.metadata
+/.recommenders
+/RemoteSystemsTempFiles
