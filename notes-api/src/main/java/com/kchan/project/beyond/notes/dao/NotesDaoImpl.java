@@ -27,6 +27,7 @@ public class NotesDaoImpl implements NotesDao {
 		}
 
 		notes.put(newNote.getId(), newNote);
+		logger.info(String.format("Note at ID[%d] created.", newNote.getId()));
 		this.incrementNextId();
 		
 		return notes.get(newNote.getId());
