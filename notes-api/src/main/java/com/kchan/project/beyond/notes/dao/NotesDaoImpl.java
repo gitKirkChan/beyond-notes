@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import com.kchan.project.beyond.notes.dto.Note;
 
+@Repository
 public class NotesDaoImpl implements NotesDao {
 
 	private static Logger logger = LogManager.getLogger();
@@ -17,7 +19,9 @@ public class NotesDaoImpl implements NotesDao {
 	
 	@Override
 	public Note create(String body) {
-		Note newNote = new Note(getNextId(), body);
+		Note newNote = new Note();
+		newNote.setId(getNextId());
+		newNote.setBody(body);
 		
 		/*
 		 * Possible case of overwrite in maps
@@ -27,7 +31,6 @@ public class NotesDaoImpl implements NotesDao {
 		}
 
 		notes.put(newNote.getId(), newNote);
-		logger.info(String.format("Note at ID[%d] created.", newNote.getId()));
 		this.incrementNextId();
 		
 		return notes.get(newNote.getId());
