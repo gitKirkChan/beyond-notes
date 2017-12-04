@@ -1,6 +1,8 @@
 package com.kchan.project.beyond.notes.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,8 +44,16 @@ public class NotesDaoImpl implements NotesDao {
 	}
 
 	@Override
-	public Note[] read() {
-		return (Note[]) notes.values().toArray();
+	public List<Note> read() {
+		return new ArrayList<Note>(notes.values());
+	}
+	
+	/*
+	 * No longer viable to use Map. Find appropriate database.
+	 */
+	@Override
+	public List<Note> read(String query) {
+		return new ArrayList<Note>(notes.values());
 	}
 
 	@Override
@@ -64,7 +74,7 @@ public class NotesDaoImpl implements NotesDao {
 	}
 	
 	/*
-	 * Is there a way to avoid this manual upkeep? Java Proxy?...
+	 * TODO Is there a way to avoid this manual upkeep? Java Proxy?...
 	 */
 	private void incrementNextId() {
 		if(this.getNextId() > Integer.MAX_VALUE) {

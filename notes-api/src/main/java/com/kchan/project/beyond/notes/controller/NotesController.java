@@ -1,4 +1,6 @@
-package com.kchan.project.beyond.notes;
+package com.kchan.project.beyond.notes.controller;
+
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,5 +42,11 @@ public class NotesController {
 		Note result = this.dao.read(id);
 		logger.info(String.format("Found note: %s", result.toString()));
 		return result;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/notes")
+	public @ResponseBody List<Note> readNotes(@PathVariable(required=false, value="query") String query) {
+		
+		return this.dao.read();
 	}
 }

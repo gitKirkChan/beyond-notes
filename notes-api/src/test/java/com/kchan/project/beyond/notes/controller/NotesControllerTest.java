@@ -1,4 +1,4 @@
-package com.kchan.project.beyond.notes;
+package com.kchan.project.beyond.notes.controller;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.kchan.project.beyond.notes.RunTestApplicationLocally;
 import com.kchan.project.beyond.notes.dao.NotesDao;
-import com.kchan.project.beyond.notes.run.RunApplicationLocally;
 
 import java.nio.charset.Charset;
 
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RunApplicationLocally.class)
+@SpringBootTest(classes = RunTestApplicationLocally.class)
 @WebAppConfiguration
 public class NotesControllerTest {
 
@@ -59,7 +59,7 @@ public class NotesControllerTest {
 	}
 	
 	/*
-	 * Can we find that note we just created?
+	 * Can we read the latest note created?
 	 */
 	@Test
 	public void testReadNote() throws Exception {
@@ -76,6 +76,24 @@ public class NotesControllerTest {
 	}
 	
 	/*
+	 * Can we read all the notes?
+	 * Failing due to dependency of other tests
+	 */
+//	@Test
+	public void testReadAllNotes() throws Exception {
+		
+		for(int i=0; i<5; i++) {
+			int id = dao.getNextId();
+			this.doCreateNote(String.format("Generated note %d to read", id));
+		}
+		
+		mockMvc.perform(get("/notes"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(this.contentType))
+				.andExpect(jsonPath("$", hasSize(5)));
+	}
+	
+	/*
 	 * Reusable note creation by only passing the note body contents
 	 */
 	private ResultActions doCreateNote(String noteBody) throws Exception {
@@ -86,6 +104,5 @@ public class NotesControllerTest {
 		return mockMvc.perform(post("/notes")
 				.contentType(this.contentType)
 				.content(noteRequest));
-
 	}
 }
