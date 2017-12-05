@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.kchan.project.beyond.notes.RunTestApplicationLocally;
+import com.kchan.project.beyond.notes.RunApp;
 import com.kchan.project.beyond.notes.dao.NotesDao;
 
 import java.nio.charset.Charset;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RunTestApplicationLocally.class)
+@SpringBootTest(classes = RunApp.class)
 @WebAppConfiguration
 public class NotesControllerTest {
 
