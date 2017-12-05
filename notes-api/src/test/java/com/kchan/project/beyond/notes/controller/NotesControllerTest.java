@@ -4,43 +4,40 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.kchan.project.beyond.notes.RunApp;
-import com.kchan.project.beyond.notes.dao.NotesDao;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kchan.project.beyond.notes.dao.NotesRepository;
+import com.kchan.project.beyond.notes.dto.Note;
 
 import java.nio.charset.Charset;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RunApp.class)
-@WebAppConfiguration
+@SpringBootTest
+@AutoConfigureMockMvc
 public class NotesControllerTest {
 
-	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
+	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON_UTF8.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
+	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
-	private WebApplicationContext webApplicationContext;
+	private NotesRepository repo;
 	
-	@Autowired
-	private NotesDao dao;
-
 	@Before
-	public void setup() throws Exception {
-		this.mockMvc = webAppContextSetup(webApplicationContext).build();
+	public void resetData() throws Exception {
+		repo.deleteAll();
 	}
 
 	/*
@@ -49,12 +46,11 @@ public class NotesControllerTest {
 	@Test
 	public void testCreateNote() throws Exception {
 		
-		int expectedId = dao.getNextId();
 		String expectedBody = "Note created!";
 		this.doCreateNote(expectedBody)
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(this.contentType))
-			.andExpect(jsonPath("$.id", is(expectedId)))
+			.andExpect(jsonPath("$.id").exists())
 			.andExpect(jsonPath("$.body", is(expectedBody)));
 	}
 	
@@ -64,44 +60,55 @@ public class NotesControllerTest {
 	@Test
 	public void testReadNote() throws Exception {
 		
-		int expectedId = dao.getNextId();
 		String expectedBody = "Spring REST!";
-		this.doCreateNote(expectedBody);
+		Note createdNote = this.doCreateNoteAndReturnCreatedNote(expectedBody);
 		
-		mockMvc.perform(get(String.format("/notes/%d", expectedId)))
+		this.mockMvc.perform(get(String.format("/notes/%d", createdNote.getId())))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(this.contentType))
-				.andExpect(jsonPath("$.id", is(expectedId)))
+				.andExpect(jsonPath("$.id", is(createdNote.getId())))
 				.andExpect(jsonPath("$.body", is(expectedBody)));
 	}
 	
 	/*
 	 * Can we read all the notes?
-	 * Failing due to dependency of other tests
 	 */
-//	@Test
+	@Test
 	public void testReadAllNotes() throws Exception {
 		
+		String expectedBody = "Generic note %d";
+		
 		for(int i=0; i<5; i++) {
-			int id = dao.getNextId();
-			this.doCreateNote(String.format("Generated note %d to read", id));
+			this.doCreateNote(String.format(expectedBody, i));
 		}
 		
-		mockMvc.perform(get("/notes"))
+		this.mockMvc.perform(get("/notes"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(this.contentType))
-				.andExpect(jsonPath("$", hasSize(5)));
+				.andExpect(jsonPath("$.*", hasSize(5)));
 	}
 	
 	/*
-	 * Reusable note creation by only passing the note body contents
+	 * Reusable note creation
+	 * 
+	 * Creates note and returns readable Note object
+	 */
+	private Note doCreateNoteAndReturnCreatedNote(String noteBody) throws Exception {
+		String rawResponse = this.doCreateNote(noteBody).andReturn().getResponse().getContentAsString();
+		return new ObjectMapper().readValue(rawResponse, Note.class);
+	}
+	
+	/*
+	 * Reusable note creation
+	 * 
+	 * Creates note and returns ResultActions from HTTP response
 	 */
 	private ResultActions doCreateNote(String noteBody) throws Exception {
 		String noteRequest = String.format("{\"body\" : \"%s\"}", noteBody);
 		
 		System.out.println(noteRequest);
 
-		return mockMvc.perform(post("/notes")
+		return this.mockMvc.perform(post("/notes")
 				.contentType(this.contentType)
 				.content(noteRequest));
 	}
