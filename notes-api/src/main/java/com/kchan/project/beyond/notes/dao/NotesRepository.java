@@ -6,11 +6,14 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.kchan.project.beyond.notes.dto.Note;
 
+/*
+ * Through Spring Data, it generates the operations defined by the CrudRepository:
+ * https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html
+ * 
+ * Accepted repository query keywords for custom repository operations:
+ * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-keywords
+ */
 public interface NotesRepository extends CrudRepository<Note, Integer> {
-
-	Note save(Note note);
 	
-	List<Note> findAll();
-	List<Note> findByBody(String body);
-
+	List<Note> findByBodyContainingIgnoreCase(String body);
 }

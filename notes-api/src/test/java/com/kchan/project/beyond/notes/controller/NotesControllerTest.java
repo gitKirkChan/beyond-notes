@@ -37,7 +37,7 @@ public class NotesControllerTest {
 	
 	@Before
 	public void resetData() throws Exception {
-		repo.deleteAll();
+		this.repo.deleteAll();
 	}
 
 	/*
@@ -47,7 +47,7 @@ public class NotesControllerTest {
 	public void testCreateNote() throws Exception {
 		
 		String expectedBody = "Note created!";
-		this.doCreateNote(expectedBody)
+		this.doHttpCreateNote(expectedBody)
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(this.contentType))
 			.andExpect(jsonPath("$.id").exists())
@@ -61,7 +61,7 @@ public class NotesControllerTest {
 	public void testReadNote() throws Exception {
 		
 		String expectedBody = "Spring REST!";
-		Note createdNote = this.doCreateNoteAndReturnCreatedNote(expectedBody);
+		Note createdNote = this.doHttpCreateNoteAndReturnNote(expectedBody);
 		
 		this.mockMvc.perform(get(String.format("/notes/%d", createdNote.getId())))
 				.andExpect(status().isOk())
@@ -79,7 +79,7 @@ public class NotesControllerTest {
 		String expectedBody = "Generic note %d";
 		
 		for(int i=0; i<5; i++) {
-			this.doCreateNote(String.format(expectedBody, i));
+			this.doHttpCreateNote(String.format(expectedBody, i));
 		}
 		
 		this.mockMvc.perform(get("/notes"))
@@ -88,13 +88,46 @@ public class NotesControllerTest {
 				.andExpect(jsonPath("$.*", hasSize(5)));
 	}
 	
+	@Test
+	public void testReadAllNotesContainingQuery() throws Exception {
+		
+		String query = "Generic no";
+
+		this.doHttpCreateNote("Note you should not get");
+		this.doMassCreateNotes();
+
+		this.mockMvc.perform(get(String.format("/notes?query=%s", query))
+				.contentType(this.contentType)
+				.content(query))
+				.andExpect(jsonPath("$.*", hasSize(5)))
+				.andExpect(jsonPath("$[0].body", containsString("Generic")));
+	}
+	
+	@Test
+	public void testReadAllNotesContainingCaseSensitiveQuery() throws Exception {
+		
+		String noteBody = "Mississippi";
+		String weirdCaseQuery = "mIssIssIppI";
+		
+		this.doHttpCreateNote(noteBody);
+		this.doHttpCreateNote(noteBody + "State");
+		this.doMassCreateNotes();
+		
+		this.mockMvc.perform(get(String.format("/notes?query=%s", weirdCaseQuery))
+				.contentType(this.contentType)
+				.content(weirdCaseQuery))
+				.andExpect(jsonPath("$.*", hasSize(2)))
+				.andExpect(jsonPath("$[0].body", containsString(noteBody)));
+	}
+	
 	/*
 	 * Reusable note creation
 	 * 
-	 * Creates note and returns readable Note object
+	 * Creates note and returns Note object
 	 */
-	private Note doCreateNoteAndReturnCreatedNote(String noteBody) throws Exception {
-		String rawResponse = this.doCreateNote(noteBody).andReturn().getResponse().getContentAsString();
+	private Note doHttpCreateNoteAndReturnNote(String noteBody) throws Exception {
+		
+		String rawResponse = this.doHttpCreateNote(noteBody).andReturn().getResponse().getContentAsString();
 		return new ObjectMapper().readValue(rawResponse, Note.class);
 	}
 	
@@ -103,13 +136,24 @@ public class NotesControllerTest {
 	 * 
 	 * Creates note and returns ResultActions from HTTP response
 	 */
-	private ResultActions doCreateNote(String noteBody) throws Exception {
+	private ResultActions doHttpCreateNote(String noteBody) throws Exception {
+		
 		String noteRequest = String.format("{\"body\" : \"%s\"}", noteBody);
 		
-		System.out.println(noteRequest);
-
 		return this.mockMvc.perform(post("/notes")
 				.contentType(this.contentType)
 				.content(noteRequest));
+	}
+	
+	/*
+	 * Mass note creation
+	 */
+	private void doMassCreateNotes() throws Exception {
+		
+		String genericBody = "Generic note %d";
+
+		for(int i=0; i<5; i++) {
+			this.doHttpCreateNote(String.format(genericBody, i));
+		}
 	}
 }

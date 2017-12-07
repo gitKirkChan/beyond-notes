@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,13 +40,32 @@ public class NotesController {
 	public @ResponseBody Note readNote(@PathVariable int id) {
 		
 		Note result = this.repo.findOne(new Integer(id));
-		logger.info(String.format("Found note: %s", result.toString()));
+		logger.debug(String.format("Found note: %s", result.toString()));
 		return result;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/notes")
-	public @ResponseBody List<Note> readNotes(@PathVariable(required=false, value="query") String query) {
+	public @ResponseBody List<Note> readNotes(@RequestParam(required=false, value="query") String query) {
 		
-		return (query ==  null) ? this.repo.findAll() : this.repo.findByBody(query); 
+		if(query != null) logger.info(String.format("Query: [%s]", query));
+		return (query ==  null) ? (List<Note>) this.repo.findAll() : this.repo.findByBodyContainingIgnoreCase(query); 
+	}
+	
+	@RequestMapping(method=RequestMethod.PUT, value="/notes")
+	public @ResponseBody String updateNote(@RequestBody Note note) {
+		
+		boolean noteFound = this.repo.exists(note.getId());
+		this.repo.save(note);
+		
+		return noteFound ? "Successful update" : "Note does not exist; saved note with a different ID";
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE, value="/notes/{id}")
+	public @ResponseBody String deleteNote(@PathVariable int id) {
+		
+		boolean noteFound = this.repo.exists(id);
+		this.repo.delete(id);
+		
+		return noteFound ? "Successful delete" : "Note does not exist";
 	}
 }
