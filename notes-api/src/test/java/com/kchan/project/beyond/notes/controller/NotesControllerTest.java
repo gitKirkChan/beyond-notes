@@ -40,6 +40,20 @@ public class NotesControllerTest {
 		this.repo.deleteAll();
 	}
 
+	@Test
+	public void testWrongApplicationContentForCreateNote() throws Exception {
+		this.mockMvc.perform(post("/notes")
+				.contentType(MediaType.APPLICATION_PDF))
+				.andExpect(status().isUnsupportedMediaType());
+	}
+	
+	@Test
+	public void testWrongApplicationContentForUpdateNote() throws Exception {
+		this.mockMvc.perform(put("/notes")
+				.contentType(MediaType.APPLICATION_PDF))
+				.andExpect(status().isUnsupportedMediaType());
+	}
+	
 	/*
 	 * Base case of creating note
 	 */

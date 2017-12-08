@@ -19,20 +19,15 @@ import com.kchan.project.beyond.notes.dao.NotesRepository;
 import com.kchan.project.beyond.notes.dto.Note;
 import com.kchan.project.beyond.notes.exception.runtimes.NotFoundException;
 
-/*
- * Do we need to specify /application-json content?
- * 
- * TODO Add runtime error(s)
- */
 @RestController
 public class NotesController {
-	
+
 	private static Logger logger = LogManager.getLogger();
 	
 	@Autowired
 	private NotesRepository repo;
 	
-	@RequestMapping(method=RequestMethod.POST, value="/notes")
+	@RequestMapping(method=RequestMethod.POST, value="/notes", consumes="application/json")
 	public Note createNote (@RequestBody Note input) {
 		
 		logger.info(input);
@@ -54,7 +49,7 @@ public class NotesController {
 		return (query ==  null) ? (List<Note>) this.repo.findAll() : this.repo.findByBodyContainingIgnoreCase(query); 
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/notes")
+	@RequestMapping(method=RequestMethod.PUT, value="/notes", consumes="application/json")
 	public ResponseEntity<String> updateNote(@RequestBody Note note) {
 		
 		boolean noteFound = this.repo.exists(note.getId());
