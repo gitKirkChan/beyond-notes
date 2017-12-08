@@ -41,7 +41,7 @@ public class NotesControllerTest {
 	}
 
 	/*
-	 * Happy path, note created
+	 * Base case of creating note
 	 */
 	@Test
 	public void testCreateNote() throws Exception {
@@ -55,8 +55,31 @@ public class NotesControllerTest {
 	}
 	
 	/*
-	 * Can we read the latest note created?
+	 * Support empty body notes
 	 */
+	@Test
+	public void testCreateEmptyStringNote() throws Exception {
+		String expectedBody = "";
+		this.doHttpCreateNote(expectedBody)
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(this.contentType))
+			.andExpect(jsonPath("$.id").exists())
+			.andExpect(jsonPath("$.body", isEmptyString()));
+	}
+	
+	/*
+	 * Support null body notes
+	 */
+	@Test
+	public void testCreateNullNote() throws Exception {
+		String expectedBody = null;
+		this.doHttpCreateNote(expectedBody)
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(this.contentType))
+			.andExpect(jsonPath("$.id").exists())
+			.andExpect(jsonPath("$.body", is("null")));
+	}
+	
 	@Test
 	public void testReadNote() throws Exception {
 		
@@ -70,17 +93,10 @@ public class NotesControllerTest {
 				.andExpect(jsonPath("$.body", is(expectedBody)));
 	}
 	
-	/*
-	 * Can we read all the notes?
-	 */
 	@Test
 	public void testReadAllNotes() throws Exception {
 		
-		String expectedBody = "Generic note %d";
-		
-		for(int i=0; i<5; i++) {
-			this.doHttpCreateNote(String.format(expectedBody, i));
-		}
+		this.doMassCreateNotes();
 		
 		this.mockMvc.perform(get("/notes"))
 				.andExpect(status().isOk())
@@ -118,6 +134,47 @@ public class NotesControllerTest {
 				.content(weirdCaseQuery))
 				.andExpect(jsonPath("$.*", hasSize(2)))
 				.andExpect(jsonPath("$[0].body", containsString(noteBody)));
+	}
+	
+	@Test
+	public void testUpdateNote() throws Exception {
+		
+		Note createdNote = this.doHttpCreateNoteAndReturnNote("Drafted note");
+		createdNote.setBody("Revised note");
+		
+		this.mockMvc.perform(put("/notes")
+				.contentType(this.contentType)
+				.content(new ObjectMapper().writeValueAsString(createdNote)))
+				.andExpect(content().string("Update successful"));
+	}
+	
+	@Test
+	public void testUpdateNonexistingNote() throws Exception {
+		
+		Note nonexistingNote = new Note("Drafted note");
+		
+		this.mockMvc.perform(put("/notes")
+				.contentType(this.contentType)
+				.content(new ObjectMapper().writeValueAsString(nonexistingNote)))
+				.andExpect(status().isCreated());
+	}
+	
+	@Test
+	public void testDeleteNote() throws Exception {
+		
+		Note note = this.doHttpCreateNoteAndReturnNote("Note to delete");
+		
+		this.mockMvc.perform(delete(String.format("/notes/%s", note.getId()))
+				.contentType(this.contentType))
+				.andExpect(content().string("Delete successful"));
+	}
+	
+	@Test
+	public void testDeleteNonexistingNote() throws Exception {
+		
+		this.mockMvc.perform(delete(String.format("/notes/%s", 10))
+				.contentType(this.contentType))
+				.andExpect(status().isNotFound());
 	}
 	
 	/*
