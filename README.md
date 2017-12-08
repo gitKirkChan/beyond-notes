@@ -3,7 +3,9 @@ Beyond Notes is a simple web API to perform CRUD operations for notes, leveragin
   
   
 ## Project Limitations
-Certain factors are beyond the limit of this exercise: distribution management and different environment profiles.
+Certain factors are beyond the limit of this exercise: distribution management and different environment profiles.  
+  
+Also, Maven may have issues pulling dependencies if there is a firewall.
   
 ### Distribution Management
 This project is too small to warrant a distribution management system. However, projects would have a repository(s) for Maven **SNAPSHOTS** and **RELEASES** to store the artifacts for potential software to release.  
@@ -13,7 +15,7 @@ Again, this project is too small for different environment profiles. However, th
   
   
 ## Technology Stack
-*Majority at least; peek at the **pom.xml** to get the full stack*
+*Majority at least; peek at the **pom.xml** or unzip the **.jar** to get the full stack*
 > H2 Database  
 > Jacoco  
 > Junit4  
@@ -28,6 +30,7 @@ Again, this project is too small for different environment profiles. However, th
   
   
 ## Required pieces to run
+*Works using the latest versions*  
 Git [[setup reference](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)]  
 Java SE 1.8 [[download](http://www.oracle.com/technetwork/java/javase/downloads/index.html)]  
 Maven [[setup reference](https://maven.apache.org/install.html)]  
@@ -58,3 +61,7 @@ Within `src/main/java`, run **RunApp.java** under `com.kchan.project.beyond.note
 The project configurations include a Jacoco report when a Maven build finishes. The results are in the `target/jacoco-ut` directory. There are several formats available. Typically, I refer to the **index.html**.  
   
 Some classes, such as the RunApp.java, are excluded from Jacoco because they skew reasonable coverage of the application code. Repository classes, implementing the Spring Data Repository, will not appear on the report but are tested with standard JUnit's. These exclusions are defined in the **pom.xml**.
+  
+  
+## Database
+This application leverages Spring JPA and H2 database for portablility and demonstration purposes. Maven handles these dependencies
