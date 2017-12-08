@@ -1,3 +1,8 @@
 server:
   port: 10101
   contextPath: /api
+  
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
