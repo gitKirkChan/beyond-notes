@@ -64,4 +64,6 @@ Some classes, such as the RunApp.java, are excluded from Jacoco because they ske
   
   
 ## Database
-This application leverages Spring JPA and H2 database for portablility and demonstration purposes. Maven handles these dependencies
+This application leverages Spring Data JPA and H2 database for portablility and demonstration purposes. Maven handles and pulls down the dependencies. Spring Data Repositories remove boilerplate code with the data access layer, especially for CRUD operations, and generates the implementation based on the JPA objects, the repository interface used and repository keywords used in custom queries. It also supports H2 DBMS by default, configured as an embedded database. Thus, there are no additional installations needed after the Maven install.  
+  
+Also, there is no persistence of data after the Spring application stops running. 
