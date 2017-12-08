@@ -55,6 +55,6 @@ Within `src/main/java`, run **RunApp.java** under `com.kchan.project.beyond.note
   
   
 ## Jacoco Report
-The project configurations include a Jacoco report when a Maven build finishes. The results are in the `target/jacoco-ut` directory. There are several formats available. Typically, I refer to the *index.html*.  
+The project configurations include a Jacoco report when a Maven build finishes. The results are in the `target/jacoco-ut` directory. There are several formats available. Typically, I refer to the **index.html**.  
   
 Some classes, such as the RunApp.java, are excluded from Jacoco because they skew reasonable coverage of the application code. Repository classes, implementing the Spring Data Repository, will not appear on the report but are tested with standard JUnit's. These exclusions are defined in the **pom.xml**.
