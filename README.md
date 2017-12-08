@@ -13,7 +13,7 @@ Again, this project is too small for different environment profiles. However, th
   
   
 ## Technology Stack
-*Majority at least; peek at the pom to get the full stack*
+*Majority at least; peek at the **pom.xml** to get the full stack*
 > H2 Database  
 > Jacoco  
 > Junit4  
