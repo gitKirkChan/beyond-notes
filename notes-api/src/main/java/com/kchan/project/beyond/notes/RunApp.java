@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.kchan.project.beyond.notes.dao.NotesRepository;
-import com.kchan.project.beyond.notes.dto.Note;
+import com.kchan.project.beyond.notes.domain.Note;
+import com.kchan.project.beyond.notes.domain.NoteRepository;
 
 @SpringBootApplication
 public class RunApp {
@@ -19,7 +19,7 @@ public class RunApp {
 	 * Bean to inject data prior to SpringApplication.run runs :)
 	 */
 	@Bean
-	protected CommandLineRunner demo(NotesRepository repo) {
+	protected CommandLineRunner demo(NoteRepository repo) {
 		return (args) -> {
 			repo.save(new Note("Buy milk before going home."));
 			repo.save(new Note("Tell Luke about his father."));

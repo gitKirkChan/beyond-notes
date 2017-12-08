@@ -123,10 +123,9 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<!-- Exclude model classes (POJO's) -->
-						<exclude>**/dto/*.class</exclude>
 						<exclude>**/RunApp.class</exclude>
-						<exclude>**/dao/Config.class</exclude>
+						<exclude>**/domain/Config.class</exclude>
+						<exclude>**/domain/Note.class</exclude>
 					</excludes>
 					<systemPropertyVariables>
 						<jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>

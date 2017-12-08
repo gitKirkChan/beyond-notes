@@ -1,4 +1,4 @@
-package com.kchan.project.beyond.notes.controller;
+package com.kchan.project.beyond.notes.web;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kchan.project.beyond.notes.dao.NotesRepository;
-import com.kchan.project.beyond.notes.dto.Note;
+import com.kchan.project.beyond.notes.domain.Note;
+import com.kchan.project.beyond.notes.domain.NoteRepository;
 
 import java.nio.charset.Charset;
 
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class NotesControllerTest {
+public class NoteControllerTest {
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON_UTF8.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -33,7 +33,7 @@ public class NotesControllerTest {
 	private MockMvc mockMvc;
 
 	@Autowired
-	private NotesRepository repo;
+	private NoteRepository repo;
 	
 	@Before
 	public void resetData() throws Exception {

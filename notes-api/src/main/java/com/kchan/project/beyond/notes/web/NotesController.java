@@ -1,4 +1,4 @@
-package com.kchan.project.beyond.notes.controller;
+package com.kchan.project.beyond.notes.web;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kchan.project.beyond.notes.dao.NotesRepository;
-import com.kchan.project.beyond.notes.dto.Note;
+import com.kchan.project.beyond.notes.domain.Note;
+import com.kchan.project.beyond.notes.domain.NoteRepository;
 import com.kchan.project.beyond.notes.exception.runtimes.NotFoundException;
 
 @RestController
@@ -25,7 +25,7 @@ public class NotesController {
 	private static Logger logger = LogManager.getLogger();
 	
 	@Autowired
-	private NotesRepository repo;
+	private NoteRepository repo;
 	
 	@RequestMapping(method=RequestMethod.POST, value="/notes", consumes="application/json")
 	public Note createNote (@RequestBody Note input) {

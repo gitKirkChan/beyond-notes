@@ -1,4 +1,4 @@
-package com.kchan.project.beyond.notes.dao;
+package com.kchan.project.beyond.notes.domain;
 
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 

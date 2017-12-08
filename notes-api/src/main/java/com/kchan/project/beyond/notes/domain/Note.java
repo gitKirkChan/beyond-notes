@@ -1,4 +1,4 @@
-package com.kchan.project.beyond.notes.dto;
+package com.kchan.project.beyond.notes.domain;
 
 import javax.persistence.*;
 

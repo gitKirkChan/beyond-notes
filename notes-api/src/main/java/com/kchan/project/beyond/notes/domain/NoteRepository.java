@@ -1,10 +1,8 @@
-package com.kchan.project.beyond.notes.dao;
+package com.kchan.project.beyond.notes.domain;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
-
-import com.kchan.project.beyond.notes.dto.Note;
 
 /*
  * Through Spring Data, it generates the operations defined by the CrudRepository:
@@ -13,7 +11,7 @@ import com.kchan.project.beyond.notes.dto.Note;
  * Accepted repository query keywords for custom repository operations:
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-keywords
  */
-public interface NotesRepository extends CrudRepository<Note, Integer> {
+public interface NoteRepository extends CrudRepository<Note, Integer> {
 	
 	List<Note> findByBodyContainingIgnoreCase(String body);
 }

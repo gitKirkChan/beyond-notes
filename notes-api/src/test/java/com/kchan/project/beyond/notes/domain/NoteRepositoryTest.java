@@ -1,4 +1,4 @@
-package com.kchan.project.beyond.notes.dao;
+package com.kchan.project.beyond.notes.domain;
 
 import static org.junit.Assert.*;
 
@@ -11,15 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.kchan.project.beyond.notes.dto.Note;
+import com.kchan.project.beyond.notes.domain.Note;
+import com.kchan.project.beyond.notes.domain.NoteRepository;
 
 /*Yay JUnit4, no annotations needed*/
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class NotesRepositoryTest {
+public class NoteRepositoryTest {
 
 	@Autowired
-	NotesRepository repo;
+	NoteRepository repo;
 
 	@Before
 	public void resetData() throws Exception {
