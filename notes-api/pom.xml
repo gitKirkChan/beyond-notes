@@ -5,7 +5,7 @@
 
 	<groupId>com.kchan.project.beyond.notes</groupId>
 	<artifactId>notes-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>notes-api</name>
