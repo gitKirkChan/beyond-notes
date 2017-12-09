@@ -20,7 +20,7 @@ import com.kchan.project.beyond.notes.domain.NoteRepository;
 import com.kchan.project.beyond.notes.exception.runtimes.NotFoundException;
 
 @RestController
-public class NotesController {
+public class NoteController {
 
 	private static Logger logger = LogManager.getLogger();
 	
@@ -35,9 +35,15 @@ public class NotesController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/notes/{id}")
-	public @ResponseBody Note readNote(@PathVariable int id) {
+	public @ResponseBody Note readNote(@PathVariable Integer id) {
 		
-		Note result = this.repo.findOne(new Integer(id));
+		boolean exists = this.repo.exists(id);
+		
+		if(!exists) {
+			throw new NotFoundException(String.format("Could not find id[%s]", id.toString()));
+		}
+		
+		Note result = this.repo.findOne(id);
 		logger.debug(String.format("Found note: \n%s", result.toString()));
 		return result;
 	}

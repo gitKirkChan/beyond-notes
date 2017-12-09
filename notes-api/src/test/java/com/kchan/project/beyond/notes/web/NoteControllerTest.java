@@ -100,11 +100,19 @@ public class NoteControllerTest {
 		String expectedBody = "Spring REST!";
 		Note createdNote = this.doHttpCreateNoteAndReturnNote(expectedBody);
 		
-		this.mockMvc.perform(get(String.format("/notes/%d", createdNote.getId())))
+		this.mockMvc.perform(get(String.format("/notes/%d", createdNote.getId()))
+				.contentType(this.contentType))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(this.contentType))
 				.andExpect(jsonPath("$.id", is(createdNote.getId())))
 				.andExpect(jsonPath("$.body", is(expectedBody)));
+	}
+	
+	@Test
+	public void testReadNonexistentNote() throws Exception {
+		
+		this.mockMvc.perform(get("/notes/200"))
+				.andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -119,6 +127,15 @@ public class NoteControllerTest {
 	}
 	
 	@Test
+	public void testReadAllNotesEmpty() throws Exception {
+		
+		this.mockMvc.perform(get("/notes"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(this.contentType))
+				.andExpect(jsonPath("$.*", hasSize(0)));
+	}
+	
+	@Test
 	public void testReadAllNotesContainingQuery() throws Exception {
 		
 		String query = "Generic no";
@@ -126,9 +143,7 @@ public class NoteControllerTest {
 		this.doHttpCreateNote("Note you should not get");
 		this.doMassCreateNotes();
 
-		this.mockMvc.perform(get(String.format("/notes?query=%s", query))
-				.contentType(this.contentType)
-				.content(query))
+		this.mockMvc.perform(get(String.format("/notes?query=%s", query)))
 				.andExpect(jsonPath("$.*", hasSize(5)))
 				.andExpect(jsonPath("$[0].body", containsString("Generic")));
 	}
@@ -143,9 +158,7 @@ public class NoteControllerTest {
 		this.doHttpCreateNote(noteBody + "State");
 		this.doMassCreateNotes();
 		
-		this.mockMvc.perform(get(String.format("/notes?query=%s", weirdCaseQuery))
-				.contentType(this.contentType)
-				.content(weirdCaseQuery))
+		this.mockMvc.perform(get(String.format("/notes?query=%s", weirdCaseQuery)))
 				.andExpect(jsonPath("$.*", hasSize(2)))
 				.andExpect(jsonPath("$[0].body", containsString(noteBody)));
 	}
