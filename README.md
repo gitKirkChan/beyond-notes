@@ -64,6 +64,7 @@ Within `src/main/java`, run **RunApp.java** under `com.kchan.project.beyond.note
 The application has a context path of */api*.
   
 **Purpose** | **Path** | **Method** | **Parameter** | **Required** | **Return**
+--- | --- | --- | --- | --- | --- 
 Create new note | `/notes/` | **POST** | **Note** | yes | **Note** created
 Find note | `/notes/**{id}**` | **GET** | id | Yes | **Note**
 Find notes; query search | `/notes` | **GET** | query | no | List<**Note**>
