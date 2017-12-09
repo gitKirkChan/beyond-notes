@@ -30,7 +30,7 @@ public class NotesController {
 	@RequestMapping(method=RequestMethod.POST, value="/notes", consumes="application/json")
 	public Note createNote (@RequestBody Note input) {
 		
-		logger.info(input);
+		logger.debug(String.format("Creating note containing [%s]", input));
 		return repo.save(new Note(input.getBody()));
 	}
 	
@@ -38,14 +38,14 @@ public class NotesController {
 	public @ResponseBody Note readNote(@PathVariable int id) {
 		
 		Note result = this.repo.findOne(new Integer(id));
-		logger.debug(String.format("Found note: %s", result.toString()));
+		logger.debug(String.format("Found note: \n%s", result.toString()));
 		return result;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/notes")
 	public @ResponseBody List<Note> readNotes(@RequestParam(required=false, value="query") String query) {
 		
-		logger.debug(String.format("Query: [%s]", query));
+		logger.debug(String.format("Fetching notes; querying: [%s]", query));
 		return (query ==  null) ? (List<Note>) this.repo.findAll() : this.repo.findByBodyContainingIgnoreCase(query); 
 	}
 	

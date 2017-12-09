@@ -3,15 +3,12 @@ Beyond Notes is a simple web API to perform CRUD operations for notes, leveragin
   
   
 ## Project Limitations
-Certain factors are beyond the limit of this exercise: distribution management and different environment profiles.  
+Certain factors are beyond the limit of this exercise: distribution management  
   
-Also, Maven may have issues pulling dependencies if there is a firewall.
+Also, Maven may have issues pulling dependencies behind firewalls. If one exists, consider configuring a proxy to your local Maven. Refer to the documents [here](https://maven.apache.org/guides/mini/guide-proxies.html).  
   
 ### Distribution Management
-This project is too small to warrant a distribution management system. However, projects would have a repository(s) for Maven **SNAPSHOTS** and **RELEASES** to store the artifacts for potential software to release.  
-  
-### Environment Profiles
-Again, this project is too small for different environment profiles. However, there would be different environments for the different levels of testing as the project grows.  
+This project is too small to warrant a distribution management system. However, projects would have a repository(s) for Maven Snapshots and Releases to store the artifacts for potential software to release.  
   
   
 ## Technology Stack
@@ -50,6 +47,12 @@ In the directory of your choice, pull the project down and run the application l
 > cd beyond-notes/notes-api
 > mvn clean install
 > java -jar target/notes-api-1.0.0-SNAPSHOT.jar
+> ```
+  
+### Run *prod* configurations
+There are two application configurations available: *dev* and *prod*. The default Spring profile is *dev*. To launch the application with *prod*, modify the *java* command like so:
+> ```shell
+> java -jar -Dspring.profiles.active=prod target/notes-api-1.0.0-SNAPSHOT.jar
 > ```
   
   

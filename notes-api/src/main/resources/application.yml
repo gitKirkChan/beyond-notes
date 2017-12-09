@@ -1,3 +1,7 @@
+spring:
+  profiles.active: dev
+
+---
 server:
   port: 10101
   contextPath: /api
@@ -6,3 +10,29 @@ spring:
   jackson:
     serialization:
       INDENT_OUTPUT: true
+      
+---
+spring:
+  profiles: dev
+logging:
+  file: logs/application.log
+  pattern:
+    console: "[%-5level] %d{DATE} %logger : %msg%n"
+    file: "[%-5level] %d{DATE} %logger : %msg%n"
+  level:
+    org.springframework.web: DEBUG
+    com.kchan.project.beyond.notes: DEBUG
+    org.h2: DEBUG
+    
+---
+spring:
+  profiles: prod
+logging:
+  file: logs/application.log
+  pattern:
+    console: "[%-5level] %d{DATE} %logger{0} : %msg%n"
+    file: "[%-5level] %d{DATE} %logger{0} : %msg%n"
+  level:
+    org.springframework.web: WARN
+    com.kchan.project.beyond.notes: WARN
+    org.h2: WARN
