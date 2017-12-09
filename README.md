@@ -50,7 +50,7 @@ In the directory of your choice, pull the project down and run the application l
 > ```
   
 ### Run *prod* configurations
-There are two application configurations available: *dev* and *prod*. The default Spring profile is *dev*. To launch the application with *prod*, modify the *java* command like so:
+There are two application configurations available: *dev* and *prod*. The default Spring profile is *dev*. To launch the application with *prod*, modify the **java** command like so:
 > ```shell
 > java -jar -Dspring.profiles.active=prod target/notes-api-1.0.0-SNAPSHOT.jar
 > ```
