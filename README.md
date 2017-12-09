@@ -59,6 +59,17 @@ There are two application configurations available: *dev* and *prod*. The defaul
 ## Run project via IDE
 Within `src/main/java`, run **RunApp.java** under `com.kchan.project.beyond.notes`.
   
+
+## Basic API Summary
+The application has a context path of */api*.
+  
+**Purpose** | **Path** | **Method** | **Parameter** | **Required** | **Return**
+Create new note | `/notes/` | **POST** | **Note** | yes | **Note** created
+Find note | `/notes/**{id}**` | **GET** | id | Yes | **Note**
+Find notes; query search | `/notes` | **GET** | query | no | List<**Note**>
+Update note | `/notes` | **PUT** | **Note** | no | Status of update (can create new note)
+Delete note | `/notes` | **DELETE** | id | yes | Status of delete (throwable **RuntimeException**)
+  
   
 ## Jacoco Report
 The project configurations include a Jacoco report when a Maven build finishes. The results are in the `target/jacoco-ut` directory. There are several formats available. Typically, I refer to the **index.html**.  
