@@ -67,16 +67,16 @@ The application has a context path of */api*.
 **Purpose** | **Path** | **Method** | **Parameter** | **Required** | **Return**
 --- | --- | --- | --- | --- | --- 
 Create new note | `/notes/` | **POST** | **Note** | yes | **Note** created
-Find note | `/notes/{id}` | **GET** | id | yes | **Note**
+Find note | `/notes/{id}` | **GET** | id | yes | **Note** (throwable **NotFoundException**)
 Find notes; query search | `/notes` | **GET** | query | no | List<**Note**>
 Update note | `/notes` | **PUT** | **Note** | no | Status of update (can create new note)
-Delete note | `/notes/{id}` | **DELETE** | id | yes | Status of delete (throwable **RuntimeException**)
+Delete note | `/notes/{id}` | **DELETE** | id | yes | Status of delete (throwable **NotFoundException**)
   
   
 ## Jacoco Report
 The project configurations include a Jacoco report when a Maven build finishes. The results are in the `target/jacoco-ut` directory. There are several formats available. Typically, I refer to the **index.html**.  
   
-Some classes, such as the RunApp.java, are excluded from Jacoco because they skew reasonable coverage of the application code. Repository classes, implementing the Spring Data Repository, will not appear on the report but are tested with standard JUnit's. These exclusions are defined in the **pom.xml**.
+Some classes, such as the **RunApp.java**, are excluded from Jacoco because they skew reasonable coverage of the application code. Repository classes, implementing the Spring Data Repository, will not appear on the report but are tested with standard JUnit's. These exclusions are defined in the **pom.xml**.
   
   
 ## Database
