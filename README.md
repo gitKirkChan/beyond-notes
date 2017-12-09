@@ -67,10 +67,10 @@ The application has a context path of */api*.
 **Purpose** | **Path** | **Method** | **Parameter** | **Required** | **Return**
 --- | --- | --- | --- | --- | --- 
 Create new note | `/notes/` | **POST** | **Note** | yes | **Note** created
-Find note | `/notes/{id}` | **GET** | id | Yes | **Note**
+Find note | `/notes/{id}` | **GET** | id | yes | **Note**
 Find notes; query search | `/notes` | **GET** | query | no | List<**Note**>
 Update note | `/notes` | **PUT** | **Note** | no | Status of update (can create new note)
-Delete note | `/notes` | **DELETE** | id | yes | Status of delete (throwable **RuntimeException**)
+Delete note | `/notes/{id}` | **DELETE** | id | yes | Status of delete (throwable **RuntimeException**)
   
   
 ## Jacoco Report

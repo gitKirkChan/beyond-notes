@@ -1,6 +1,7 @@
 package com.kchan.project.beyond.notes.web;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,10 +50,14 @@ public class NoteController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/notes")
-	public @ResponseBody List<Note> readNotes(@RequestParam(required=false, value="query") String query) {
+	public @ResponseBody List<Note> readNotes(@RequestParam(value="query", required=false) Optional<String> query) {
 		
-		logger.debug(String.format("Fetching notes; querying: [%s]", query));
-		return (query ==  null) ? (List<Note>) this.repo.findAll() : this.repo.findByBodyContainingIgnoreCase(query); 
+		logger.debug(query.isPresent() ? 
+					String.format("Querying [%s]", query.get()) : "Fetch all notes");
+		
+		return query.isPresent() ?
+					this.repo.findByBodyContainingIgnoreCase(query.get()) :
+					(List<Note>) this.repo.findAll();
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/notes", consumes="application/json")
@@ -72,7 +77,7 @@ public class NoteController {
 	 * Synchronized to prevent possibility of Exception thrown during delete operation
 	 */
 	@RequestMapping(method=RequestMethod.DELETE, value="/notes/{id}")
-	public synchronized ResponseEntity<String> deleteNote(@PathVariable int id) {
+	public synchronized ResponseEntity<String> deleteNote(@PathVariable("id") Integer id) {
 		
 		boolean noteFound = this.repo.exists(id);
 		
