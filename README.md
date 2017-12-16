@@ -49,7 +49,26 @@ mvn clean install
 java -jar target/notes-api-1.0.0-SNAPSHOT.jar
 ```
   
-Run *curl* commands to interface with the RESTful web services. This application does not have a frontend GUI.
+Run the command below to verify the application is up.
+```shell
+curl -i -X GET http://localhost:10101/api/health
+```
+
+If you receive a response similar to below, then you have a healthy API running.
+```shell
+HTTP/1.1 200
+X-Application-Context: application:dev:10101
+Content-Type: application/vnd.spring-boot.actuator.v1+json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sat, 16 Dec 2017 22:38:49 GMT
+
+{
+  "status" : "UP"
+}
+```
+  
+  
+Use *curl* commands to interface with the RESTful web services against *http://localhost:10101/api/notes*. Details about the endpoints are under **Basic API Summary**.
   
 ### Run *prod* configurations
 There are two application configurations available: *dev* and *prod*. The default Spring profile is *dev*. To launch the application with *prod*, modify the **java** command like so:
