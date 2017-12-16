@@ -40,7 +40,7 @@ The Lombok library may affect how developers view the source code because it gen
 The project uses the port 10101. If there is a port conflict, redefine it in the **application.yml** file.  
   
   
-## Run project via command line
+## Run project
 In the directory of your choice, pull the project down and run the application locally.
 ```shell
 git clone https://github.com/gitKirkChan/beyond-notes.git
@@ -49,6 +49,8 @@ mvn clean install
 java -jar target/notes-api-1.0.0-SNAPSHOT.jar
 ```
   
+Run *curl* commands to interface with the RESTful web services. This application does not have a frontend GUI.
+  
 ### Run *prod* configurations
 There are two application configurations available: *dev* and *prod*. The default Spring profile is *dev*. To launch the application with *prod*, modify the **java** command like so:
 ```shell
@@ -56,8 +58,8 @@ java -jar -Dspring.profiles.active=prod target/notes-api-1.0.0-SNAPSHOT.jar
 ```
   
   
-## Run project via IDE
-Within `src/main/java`, run **RunApp.java** under `com.kchan.project.beyond.notes`.
+## Run project in IDE
+Within `src/main/java`, run **RunApp.java** under `com.kchan.project.beyond.notes` as a Java application.
   
 
 ## Basic API Summary
