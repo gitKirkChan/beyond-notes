@@ -42,18 +42,18 @@ The project uses the port 10101. If there is a port conflict, redefine it in the
   
 ## Run project via command line
 In the directory of your choice, pull the project down and run the application locally.
-> ```shell
-> git clone https://github.com/gitKirkChan/beyond-notes.git
-> cd beyond-notes/notes-api
-> mvn clean install
-> java -jar target/notes-api-1.0.0-SNAPSHOT.jar
-> ```
+```shell
+git clone https://github.com/gitKirkChan/beyond-notes.git
+cd beyond-notes/notes-api
+mvn clean install
+java -jar target/notes-api-1.0.0-SNAPSHOT.jar
+```
   
 ### Run *prod* configurations
 There are two application configurations available: *dev* and *prod*. The default Spring profile is *dev*. To launch the application with *prod*, modify the **java** command like so:
-> ```shell
-> java -jar -Dspring.profiles.active=prod target/notes-api-1.0.0-SNAPSHOT.jar
-> ```
+```shell
+java -jar -Dspring.profiles.active=prod target/notes-api-1.0.0-SNAPSHOT.jar
+```
   
   
 ## Run project via IDE
